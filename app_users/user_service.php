@@ -1,5 +1,4 @@
 <?php
-//echo 'user service privada<br>';
 class UserService
 {
 
@@ -14,6 +13,13 @@ class UserService
 
     public function registerUser()
     {
+
+        $query = "INSERT INTO user (name, email, pass) VALUES (:name, :email, :pass)";
+        $stmt = $this->connection->prepare($query);
+        $stmt->bindValue(':name', $this->user->__get('name'));
+        $stmt->bindValue(':email', $this->user->__get('email'));
+        $stmt->bindValue(':pass', $this->user->__get('pass'));
+        $stmt->execute();
     }
 
     public function readAllUsers()
