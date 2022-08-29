@@ -17,3 +17,5 @@ INSERT INTO user (name, email, pass) VALUES ('Mariona Rios', 'mari@cesc.dev', 'a
 
 SELECT * FROM user;
 SELECT id, name FROM user WHERE name LIKE '%Jo%'
+
+DELETE FROM user WHERE id = id;

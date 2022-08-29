@@ -1,44 +1,81 @@
 $(document).ready(function () {
 
-    $.ajax({
-        type: 'GET',
-        url: 'user_controller_jq.php',
-        data: `actionUser=searchAllUsers`, //x-www-form-urlencoded
-        dataType: 'text',
-        success: dados => {
+    //Chamada da função para ler todos os usuários
+    searchAllUsers();
+    //Criação da funcão para ler todos os usuários
+    function searchAllUsers() {
+        $.ajax({
+            type: 'GET',
+            url: 'user_controller_jq.php',
+            data: `actionUser=searchAllUsers`, //x-www-form-urlencoded
+            dataType: 'text',
+            success: dados => {
 
-            let obj = JSON.parse(dados);
-            //console.log('TAMANHO DA TOTAL ' + obj.length);
+                let obj = JSON.parse(dados);
+                //console.log('TAMANHO DA TOTAL ' + obj.length);
 
-            for (let i in obj) {
+                for (let i in obj) {
 
-                let linha = document.createElement("tr");
-                let coluna1 = document.createElement("td");
-                let coluna2 = document.createElement("td");
-                let coluna3 = document.createElement("td");
+                    let linha = document.createElement("tr");
+                    let coluna1 = document.createElement("td");
+                    let coluna2 = document.createElement("td");
+                    let coluna3 = document.createElement("td");
+                    let coluna4 = document.createElement("td");
 
-                coluna1.innerHTML = obj[i].id;
-                coluna2.innerHTML = obj[i].name;
-                coluna3.innerHTML = obj[i].email;
+                    let botaoDelete = document.createElement("button");
 
-                linha.appendChild(coluna1);
-                linha.appendChild(coluna2);
-                linha.appendChild(coluna3);
+                    $(botaoDelete).html("X");
+                    $(botaoDelete).attr("id", "iduser-" + obj[i].id);
+                    $(botaoDelete).addClass("btn btn-danger text-white fw-bold bt-delete");
 
-                $("#tabela").append(linha);
-            }
+                    coluna1.innerHTML = obj[i].id;
+                    coluna2.innerHTML = obj[i].name;
+                    coluna3.innerHTML = obj[i].email;
+                    //coluna4.innerHTML = '<button id=iduser-"' + obj[i].id + '" class="btn btn-danger text-white fw-bold">X</button>';
+                    coluna4.appendChild(botaoDelete);
 
-            $("#qtd-usuarios").html(`${obj.length} usuários cadastrados no total! `);
-        },
-        error: erro => { console.log(erro) }
-    });
+                    linha.appendChild(coluna1);
+                    linha.appendChild(coluna2);
+                    linha.appendChild(coluna3);
+                    linha.appendChild(coluna4);
 
+                    $("#tabela").append(linha);
+                }
+
+                $("#qtd-usuarios").html(`${obj.length} usuários cadastrados no total! `);
+
+                $(".btn-danger").on('click', (e) => {
+                    //recebe o clique, recupera o atributo ID e remove o texto padrão
+                    let id = $(e.target).attr("id").replaceAll('iduser-', '');
+                    deleteUser(id);
+                });
+            },
+            error: erro => { console.log(erro) }
+        });
+    }
+
+    function deleteUser(id) {
+
+        let param = `actionUser=deleteUser&userId=${id}`;
+        $.ajax({
+            type: 'GET',
+            url: 'user_controller_jq.php',
+            data: param,
+            dataType: 'text',
+            success: () => {
+                $("#tabela").html('');
+                searchAllUsers();
+            },
+            error: e => { console.log(e) }
+        });
+
+    }
+
+    //Atribuição de evento ON CLICK para requisição de busca pelo nome
     $("#btn-submit").on('click', (e) => {
         e.preventDefault();
 
-        //$("input-name").;
         let dados = $('form').serialize() + '&actionUser=searchTermName'
-        //console.log(dados);
 
         $.ajax({
             type: 'GET',
@@ -59,14 +96,17 @@ $(document).ready(function () {
                         let coluna1 = document.createElement("td");
                         let coluna2 = document.createElement("td");
                         let coluna3 = document.createElement("td");
+                        let coluna4 = document.createElement("td");
 
                         coluna1.innerHTML = obj[i].id;
                         coluna2.innerHTML = obj[i].name;
                         coluna3.innerHTML = obj[i].email;
+                        coluna4.innerHTML = 'iduser-' + obj[i].id;
 
                         linha.appendChild(coluna1);
                         linha.appendChild(coluna2);
                         linha.appendChild(coluna3);
+                        linha.appendChild(coluna4);
 
                         $("#tabela").append(linha);
                     }
@@ -81,4 +121,5 @@ $(document).ready(function () {
             error: erro => { console.log(erro) }
         });
     });
+
 });

@@ -37,4 +37,12 @@ class UserService
         $stmt->bindValue(':pass', $this->user->__get('pass'));
         $stmt->execute();
     }
+
+    public function deleteUser()
+    {
+        $query = "DELETE FROM user WHERE id = :id";
+        $stmt = $this->connection->prepare($query);
+        $stmt->bindValue(':id', $this->user->__get('id'));
+        return $stmt->execute();
+    }
 }
