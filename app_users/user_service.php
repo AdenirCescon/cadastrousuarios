@@ -45,4 +45,15 @@ class UserService
         $stmt->bindValue(':id', $this->user->__get('id'));
         return $stmt->execute();
     }
+
+    public function updateUser()
+    {
+        $query = "UPDATE user SET name = :name , email = :email , pass = :pass WHERE id = :id";
+        $stmt = $this->connection->prepare($query);
+        $stmt->bindValue(':name', $this->user->__get('name'));
+        $stmt->bindValue(':email', $this->user->__get('email'));
+        $stmt->bindValue(':pass', $this->user->__get('pass'));
+        $stmt->bindValue(':id', $this->user->__get('id'));
+        print_r($stmt);
+    }
 }

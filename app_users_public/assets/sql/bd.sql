@@ -19,3 +19,5 @@ SELECT * FROM user;
 SELECT id, name FROM user WHERE name LIKE '%Jo%'
 
 DELETE FROM user WHERE id = id;
+
+UPDATE user SET name = 'Adenirzim', email = 'cesc@cesc.dev', pass =  'amarelo02' WHERE id = id;

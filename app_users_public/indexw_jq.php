@@ -1,5 +1,4 @@
 <?php
-require  "user_controller.php";
 include "views/header_jq.html";
 ?>
 <div class="container">
