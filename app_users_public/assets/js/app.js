@@ -6,6 +6,8 @@ $(document).ready(function () {
 
     //Chamada da função para atribuir evento de clique ao bootão de buscar nome
     readNamesEvent();
+
+    registarUser();
 });
 
 //Função para limprar a tabela de usuários
@@ -132,5 +134,49 @@ function readNamesEvent() {
             },
             error: erro => { console.log(erro) }
         });
+    });
+}
+
+//Função para cadastrar usuários
+function registarUser() {
+
+    $("#btn-submit-cad").on('click', e => {
+
+        e.preventDefault();
+        let nome = $("#nameinput").val();
+        let pass = $("#passinput").val();
+        let email = $("#emailinput").val();
+
+        console.log('SERIALIZE ', $("#form-cad").serialize());
+        //console.log(e.target);
+        //console.log(nome + " " + pass + " " + email);
+
+        let dados = 'name=' + nome + '&pass=' + pass + '&email=' + email + '&actionUser=registerUser';
+        console.log('LET DADOS ' + dados);
+
+
+        $.ajax({
+            type: 'POST',
+            url: 'user_controller_jq.php',
+            data: dados, //x-www-form-urlencoded
+            dataType: 'text',
+            success: dados => {
+
+                let obj = JSON.parse(dados);
+                console.log('JSON text ' + dados);
+
+                $("#msg-success").html("DEU BOM");
+
+                console.log(obj);
+            },
+            error: erro => {
+
+                $("#msg-success").html("DEU RUIM");
+                console.log(erro);
+            }
+        });
+
+
+        $("input").val("");
     });
 }
